@@ -38,3 +38,33 @@ There are some tiny and cute functions that help to obtain all the informations 
   * String param_name : param name
   * String dst  : destination String, the single value
   
+  
+Example:
+use **.** for select the correct node.
+
+graph.xml 
+```xml
+
+<Graph>get_SubNodesParamList("Graph.nodes","value", )
+	<nodes>
+		<node type = "foofoo" id = "n0" value = "foofooval" />
+		<node type = "booboo" id = "n1" value = "boobooval" />
+		<node type = "looloo" id = "n2" value = "loolooval" />
+	</nodes>
+	<edges>
+		<edge from = "n0" to = "n1"/>
+		<edge from = "n1" to = "n0"/>		
+		<edge from = "n2" to = "n0"/>	
+		<edge from = "n1" to = "n2"/>	
+	</edges>
+</Graph>
+```
+Code:
+```
+XmlParser xmlp = new XmlParser();
+ArrayList<String> dst = new ArrayList<String>();
+xmlp.load_file("graph.xml");
+xmlp.get_SubNodesParamList("Graph.nodes","value", dst);
+``` 
+Result:
+dst = [foofooval, boobooval, loolooval]
