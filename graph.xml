@@ -1,0 +1,13 @@
+<Graph>
+	<nodes>
+		<node type = "foofoo" id = "n0" value = "foofooval" />
+		<node type = "booboo" id = "n1" value = "boobooval" />
+		<node type = "looloo" id = "n2" value = "loolooval" />
+	</nodes>
+	<edges>
+		<edge from = "n0" to = "n1"/>
+		<edge from = "n1" to = "n0"/>		
+		<edge from = "n2" to = "n0"/>	
+		<edge from = "n1" to = "n2"/>	
+	</edges>
+</Graph>
