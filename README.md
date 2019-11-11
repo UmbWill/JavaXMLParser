@@ -45,7 +45,7 @@ use **.** for select the correct node.
 graph.xml 
 ```xml
 
-<Graph>get_SubNodesParamList("Graph.nodes","value", )
+<Graph>
 	<nodes>
 		<node type = "foofoo" id = "n0" value = "foofooval" />
 		<node type = "booboo" id = "n1" value = "boobooval" />
