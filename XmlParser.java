@@ -133,7 +133,7 @@ public class XmlParser{
                 Node attribute = attrMap.item(j);
                 String key = attribute.getNodeName();
                 
-                if(key == null || key != param_name)continue;
+                if(key == null || !(key.equals(param_name)))continue;
                 String value = attribute.getTextContent();             
                 dst.add(value);
             }
@@ -168,7 +168,7 @@ public class XmlParser{
         NamedNodeMap attrMap = gotNode.getAttributes();
         for (int j=0; j < attrMap.getLength(); j++){
             String key = attrMap.item(j).getNodeName();
-            if(key == null || key != param_name)continue;
+            if(key == null || !(key.equals(param_name)))continue;
             String value = attrMap.item(j).getTextContent();
             dst = value;
         }
