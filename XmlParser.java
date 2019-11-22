@@ -1,15 +1,16 @@
+package corevision;
 
 import javax.xml.parsers.*;
 import java.io.File;
 import java.io.IOException;
 import org.xml.sax.SAXException;
-
+import java.lang.StringBuffer;
 import org.w3c.dom.Node;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.NamedNodeMap;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.ArrayList;
 
 public class XmlParser{
@@ -26,7 +27,7 @@ public class XmlParser{
         File f = new File(file);
 
         if(!(f.exists() && !f.isDirectory())){
-            System.out.println("File name or path wrong.");
+            System.out.println("File name or path wrong. Check "+file);
             return false;
         }
         try{
@@ -81,9 +82,10 @@ public class XmlParser{
         return null;
     }
 
-    public boolean get_SubNodesValuesList(String node_name, HashMap<String, String> dst ){
+    public boolean get_SubNodesValuesMap(String node_name, LinkedHashMap<String, String> dst ){
         
         Node gotNode = _get_node_byName(root_node,node_name);
+        if(gotNode == null)return false;
         NodeList childrenList = gotNode.getChildNodes();
         for(int i = 0; i<childrenList.getLength(); i++){          
             if(childrenList.item(i).getNodeType() != Node.ELEMENT_NODE)continue;
@@ -97,15 +99,33 @@ public class XmlParser{
 
     }
 
-    public boolean get_SubNodesParamsList(String node_name, ArrayList<HashMap<String, String>> dst ){
+    public boolean get_SubNodesValuesList(String node_name, ArrayList<String> dst ){
+        
+        Node gotNode = _get_node_byName(root_node,node_name);
+        if(gotNode == null)return false;
+        NodeList childrenList = gotNode.getChildNodes();
+        for(int i = 0; i<childrenList.getLength(); i++){          
+            if(childrenList.item(i).getNodeType() != Node.ELEMENT_NODE)continue;
+            //String key = childrenList.item(i).getNodeName();
+            String value = childrenList.item(i).getTextContent();
+            dst.add(value);          
+        }
+        //System.out.println("Dest List:");
+        //System.out.println(dst);
+        return true;
+
+    }
+
+    public boolean get_SubNodesParamsList(String node_name, ArrayList<LinkedHashMap<String, String>> dst ){
         
         
         Node gotNode = _get_node_byName(root_node,node_name);
+        if(gotNode == null)return false;
         NodeList childrenList = gotNode.getChildNodes();
         for(int i = 0; i<childrenList.getLength(); i++){
             if(childrenList.item(i).getNodeType() != Node.ELEMENT_NODE){continue;}
             NamedNodeMap attrMap = childrenList.item(i).getAttributes();
-            HashMap<String, String> tmp = new HashMap<String, String>();
+            LinkedHashMap<String, String> tmp = new LinkedHashMap<String, String>();
             for (int j=0; j < attrMap.getLength(); j++){
                 Node attribute = attrMap.item(j);
                 String key = attribute.getNodeName();
@@ -124,15 +144,14 @@ public class XmlParser{
     public boolean get_SubNodesParamList(String node_name, String param_name, ArrayList<String> dst ){
         
         Node gotNode = _get_node_byName(root_node,node_name);
+        if(gotNode == null)return false;
         NodeList childrenList = gotNode.getChildNodes();
-
         for(int i = 0; i<childrenList.getLength(); i++){
             if(childrenList.item(i).getNodeType() != Node.ELEMENT_NODE){continue;}
             NamedNodeMap attrMap = childrenList.item(i).getAttributes();
             for (int j=0; j < attrMap.getLength(); j++){
                 Node attribute = attrMap.item(j);
                 String key = attribute.getNodeName();
-                
                 if(key == null || !(key.equals(param_name)))continue;
                 String value = attribute.getTextContent();             
                 dst.add(value);
@@ -144,10 +163,10 @@ public class XmlParser{
 
     }
 
-    public boolean get_NodeParamsValues(String node_name, HashMap<String, String> dst ){
-        
+    public boolean get_NodeParamsValues(String node_name, LinkedHashMap<String, String> dst ){
         
         Node gotNode = _get_node_byName(root_node,node_name);
+        if(gotNode == null)return false;
         NamedNodeMap attrMap = gotNode.getAttributes();
         for (int j=0; j < attrMap.getLength(); j++){
             String key = attrMap.item(j).getNodeName();
@@ -161,16 +180,17 @@ public class XmlParser{
 
     }
 
-    public boolean get_NodeParamValue(String node_name, String param_name, String dst ){
+    public boolean get_NodeParamValue(String node_name, String param_name, StringBuffer dst ){
         
         
         Node gotNode = _get_node_byName(root_node,node_name);
+        if(gotNode == null)return false;
         NamedNodeMap attrMap = gotNode.getAttributes();
         for (int j=0; j < attrMap.getLength(); j++){
-            String key = attrMap.item(j).getNodeName();
+            String key = attrMap.item(j).getNodeName(); 
             if(key == null || !(key.equals(param_name)))continue;
             String value = attrMap.item(j).getTextContent();
-            dst = value;
+            dst.append(value);
         }
         //System.out.println("Dest:");
         //System.out.println(dst);
